@@ -154,7 +154,7 @@ def main():
             for column, number, translation in st.session_state.drawn_numbers
         ]
         data = pd.DataFrame(drawn_numbers, columns=["Number", "Translation"])
-        st.write("All Drawn Numbers:")
+        st.write("History:")
         st.write(data)
         st.write("Press the button to draw another Bingo number.")
     else:
