@@ -127,6 +127,7 @@ def draw_bingo_number() -> tuple[str, int, str] | None:
 def main():
 
     st.title("Bingo Number Drawer")
+    st.header("Ndé Bizaa' 🪶")
 
     if "bingo_numbers" not in st.session_state:
         st.session_state.bingo_numbers = BINGO.copy()
@@ -144,18 +145,18 @@ def main():
 
         translation = st.session_state.bingo_numbers[column].pop(number)
 
-        st.markdown(f"# {column}: {translation}")
-        st.markdown(f"## {column}: {number}")
-
         st.session_state.drawn_numbers.append((column, number, translation))
 
+        st.markdown(f"# {column} {number}")
+        st.markdown(f"## {number}: {translation}")
+
         drawn_numbers: list[tuple[str, str]] = [
-            (f"{column}: {number}", f"{column}: {translation}")
+            (f"{column} {number}", translation)
             for column, number, translation in st.session_state.drawn_numbers
         ]
         data = pd.DataFrame(drawn_numbers, columns=["Number", "Translation"])
         st.write("History:")
-        st.write(data)
+        st.data_editor(data)
         st.write("Press the button to draw another Bingo number.")
     else:
         st.write("Press the button to draw a Bingo number.")
