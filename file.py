@@ -113,21 +113,20 @@ BINGO: dict[str, dict[int, str]] = {
 }
 
 
-def draw_bingo_number() -> tuple[str, int, str] | None:
+def generate_bingo_draw(session_state_bingo_numbers: dict[str, dict[int, str]]) -> tuple[str, int, str] | None:
     """Draw a random bingo number from the BINGO card."""
-    column = choice(list(BINGO.keys()))
-    if not BINGO[column]:
+    column = choice(list(session_state_bingo_numbers.keys()))
+    if not session_state_bingo_numbers[column]:
         return None
-    number = choice(list(BINGO[column].keys()))
-    translation = BINGO[column].pop(number)
+    number = choice(list(session_state_bingo_numbers[column].keys()))
+    translation = session_state_bingo_numbers[column].pop(number)
     bingo_items = column, number, translation
     return bingo_items
 
 
 def main():
 
-    st.title("Bingo Number Drawer")
-    st.header("Ndé Bizaa' 🪶")
+    st.title("Ndé Bizaa' Bingo 🪶")
 
     if "bingo_numbers" not in st.session_state:
         st.session_state.bingo_numbers = BINGO.copy()
@@ -136,25 +135,23 @@ def main():
         st.session_state.drawn_numbers = []
 
     if st.button("Draw a Bingo Number"):
-        column = choice(list(st.session_state.bingo_numbers.keys()))
-        if len(st.session_state.bingo_numbers[column]) == 0:
-            st.write(f"No more numbers left in column {column}.")
+        bingo_items = generate_bingo_draw(st.session_state.bingo_numbers)
+        if bingo_items is None:
+            st.write("No more numbers left to draw.")
             return
 
-        number = choice(list(st.session_state.bingo_numbers[column].keys()))
-
-        translation = st.session_state.bingo_numbers[column].pop(number)
-
+        column, number, translation = bingo_items
         st.session_state.drawn_numbers.append((column, number, translation))
 
-        st.markdown(f"# {column} {number}")
-        st.markdown(f"## {number}: {translation}")
+        st.header(f"{column} {number}")
+        st.subheader(f"{number}: {translation}")
+        st.markdown("---")
 
         drawn_numbers: list[tuple[str, str]] = [
             (f"{column} {number}", translation)
             for column, number, translation in st.session_state.drawn_numbers
         ]
-        data = pd.DataFrame(drawn_numbers, columns=["Number", "Translation"])
+        data = pd.DataFrame(drawn_numbers, columns=["Bingo Number", "Translation"])
         st.write("History:")
         st.data_editor(data)
         st.write("Press the button to draw another Bingo number.")
