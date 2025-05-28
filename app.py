@@ -134,6 +134,8 @@ def main():
         st.session_state.bingo_numbers = BINGO.copy()
     if "drawn_numbers" not in st.session_state:
         st.session_state.drawn_numbers = []
+    if "display_balloons" not in st.session_state:
+        st.session_state.display_balloons = True
 
     if st.button("Draw a Bingo Number"):
         if st.session_state.bingo_numbers:
@@ -147,9 +149,11 @@ def main():
 
                 st.header(f"{column} {number}")
                 st.subheader(f"{number}: {translation}")
-                # st.write("Press the button to draw another Bingo number.")
 
     if st.session_state.bingo_numbers is None:
+        if st.session_state.display_balloons:
+            st.balloons()
+            st.session_state.display_balloons = False
         st.info("All Bingo numbers have been drawn!")
 
     if not st.session_state.drawn_numbers:
@@ -165,7 +169,7 @@ def main():
         ]
         data = pd.DataFrame(drawn_numbers, columns=["Bingo Number", "Translation"])
         st.write("History:")
-        st.data_editor(data,hide_index=True)
+        st.data_editor(data)
         
 
 
