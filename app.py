@@ -112,6 +112,21 @@ BINGO: dict[str, dict[int, str]] = {
     },
 }
 
+RULES = [
+    "75-Ball Bingo",
+    "",
+    "Players use cards that feature five columns of five squares each, with every square containing a number (except the middle square, which is designated a 'FREE' space). A player wins by completing a row, column, or diagonal.",
+    "",
+    "Columns:",
+    "   B: numbers 1 through 15",
+    "   I: numbers 16 through 30",
+    "   N: numbers 31 through 45",
+    "   G: numbers 46 through 60",
+    "   O: numbers 61 through 75",
+    "",
+    "The number of all possible bingo card variations is 552,446,474,061,128,648,601,600.",
+]
+
 
 def generate_bingo_draw(
     bingo_numbers: dict[str, dict[int, str]],
@@ -157,9 +172,28 @@ def main():
         st.info("All Bingo numbers have been drawn!")
 
     if not st.session_state.drawn_numbers:
-        st.write("Press the button to draw a Bingo number.")
+        st.markdown(":blue[Press the button to draw a Bingo number.]")
     elif st.session_state.bingo_numbers:
-        st.write("Press the button to draw another Bingo number.")
+        st.markdown(":green[Press the button to draw another Bingo number.]")
+
+    display_button = st.button("Display BINGO Rules")
+
+    if st.button("Reset"):
+        st.session_state.bingo_numbers = BINGO.copy()
+        st.session_state.drawn_numbers = []
+        st.session_state.display_balloons = True
+        st.info("The Bingo game has been reset. You can start drawing numbers again.")
+
+    if display_button:
+        # st.subheader(RULES[0])
+        # for rule in RULES[1:]:
+        #     st.write(rule)
+        # st.text_area("BINGO Rules", value="\n".join(RULES), height=200)
+        st.code(
+            "\n".join(RULES),
+            language=None,
+            wrap_lines=True,
+        )
     st.divider()
 
     if st.session_state.drawn_numbers:
@@ -170,7 +204,6 @@ def main():
         data = pd.DataFrame(drawn_numbers, columns=["Bingo Number", "Translation"])
         st.write("History:")
         st.data_editor(data)
-        
 
 
 if __name__ == "__main__":
