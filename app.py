@@ -18,7 +18,7 @@ AFFIX_ONE = "łe"
 SUFFIX_TEN = "dzáa'da"
 
 TWENTY = "naadini"
-THIRTY = "tàdini"
+THIRTY = "tádini"
 FORTY = f"{FOUR[:-1]}shdini"
 FIFTY = f"{FIVE[:-2]}dini"
 SIXTY = f"{SIX[:5]}ą́dini"
@@ -152,18 +152,24 @@ def main():
     if "display_balloons" not in st.session_state:
         st.session_state.display_balloons = True
 
-    if st.button("Draw a Bingo Number"):
-        if st.session_state.bingo_numbers:
-            bingo_items = generate_bingo_draw(st.session_state.bingo_numbers)
-            if bingo_items is None:
-                st.session_state.bingo_numbers = None
-            else:
-                column, number, translation = bingo_items
-                st.session_state.drawn_numbers.append((column, number, translation))
-                st.session_state.bingo_numbers[column].pop(number)
+    bingo_button = st.button("Draw a Bingo Number")
+    
+    if not st.session_state.drawn_numbers:
+        st.markdown(":blue[Press the button to draw a Bingo number.]")
+    elif st.session_state.bingo_numbers:
+        st.markdown(":green[Press the button to draw another Bingo number.]")
+    
+    if bingo_button and st.session_state.bingo_numbers:
+        bingo_items = generate_bingo_draw(st.session_state.bingo_numbers)
+        if bingo_items is None:
+            st.session_state.bingo_numbers = None
+        else:
+            column, number, translation = bingo_items
+            st.session_state.drawn_numbers.append((column, number, translation))
+            st.session_state.bingo_numbers[column].pop(number)
 
-                st.header(f"{column} {number}")
-                st.subheader(f"{number}: {translation}")
+            st.header(f"{column} {number}")
+            st.subheader(f"{number}: {translation}")
 
     if st.session_state.bingo_numbers is None:
         if st.session_state.display_balloons:
@@ -171,10 +177,6 @@ def main():
             st.session_state.display_balloons = False
         st.info("All Bingo numbers have been drawn!")
 
-    if not st.session_state.drawn_numbers:
-        st.markdown(":blue[Press the button to draw a Bingo number.]")
-    elif st.session_state.bingo_numbers:
-        st.markdown(":green[Press the button to draw another Bingo number.]")
 
     display_button = st.button("Display BINGO Rules")
 
