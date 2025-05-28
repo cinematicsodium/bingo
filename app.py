@@ -155,7 +155,7 @@ def main():
     bingo_button = st.button("Draw a Bingo Number")
     
     if not st.session_state.drawn_numbers:
-        st.markdown(":blue[Press the button to draw a Bingo number.]")
+        st.markdown("⬆️ :blue[Press the button to draw a Bingo number.]")
     elif st.session_state.bingo_numbers:
         st.markdown(":green[Press the button to draw another Bingo number.]")
     
