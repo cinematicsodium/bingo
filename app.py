@@ -3,7 +3,7 @@ from random import choice
 import pandas as pd
 import streamlit as st
 
-ONE = "dále'é"
+ONE = "dałe'é"
 TWO = "naaki"
 THREE = "tai'"
 FOUR = "dį́į́'"
